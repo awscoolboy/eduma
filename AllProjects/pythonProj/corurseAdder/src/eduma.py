@@ -3,6 +3,7 @@ from time import sleep
 from pyyoutube import Api
 from embeddify import Embedder
 import isodate
+from pyvirtualdisplay import Display 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from database import Course, Lesson
@@ -21,6 +22,9 @@ import time
 
 bot = telebot.TeleBot(bot_token)
 
+display = Display(visible=0, size=(800, 600)) 
+display.start() 
+
 def getYoutubeEmbedCode(videoId):
     embedder = Embedder()
     code = embedder("https://www.youtube.com/watch?v=" + str(videoId), width="853", height="480")
@@ -37,7 +41,9 @@ def formatLessonName(count):
     return countStr
 
 def login():
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    options.add_argument('--no-sandbox')
+    driver = webdriver.Chrome(chrome_options=options)
     driver.get(url)
     time.sleep(1)
     login_btn = driver.find_element_by_xpath('//*[@id="wp-submit"]')
